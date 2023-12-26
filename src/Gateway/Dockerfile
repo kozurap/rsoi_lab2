@@ -9,7 +9,7 @@ WORKDIR /src
 COPY ["src/Gateway/Gateway.csproj", "Gateway/"]
 COPY ["src/Kernel/Kernel.csproj", "Kernel/"]
 
-RUN dotnet restore "/src/Gateway"
+RUN dotnet restore "Gateway"
 COPY /src .
 WORKDIR "/src/Gateway"
 RUN dotnet build -c Release -o /app/build
