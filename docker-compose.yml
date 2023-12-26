@@ -6,15 +6,77 @@ services:
     restart: on-failure
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
 
-# TODO добавить сервисы
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    ports:
+      - ${PGADMIN_OUT_PORT}:80
+    restart: always
+    volumes:
+      - pgadmin:/root/.pgadmin
+
+  ticket-service:
+    container_name: "ticketservice"
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: ./src/TicketService/Dockerfile
+    restart: always
+    ports:
+      - ${TICKET_SERVICE_OUT_PORT}:80
+    env_file:
+      - .env
+        
+  privilege-service:
+    container_name: "privilegeservice"
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: ./src/BonusService/Dockerfile
+    restart: always
+    ports:
+      - ${PRIVILEGE_SERVICE_OUT_PORT}:80
+    env_file:
+      - .env
+
+  flight-service:
+    container_name: "flightservice"
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: ./src/FlightService/Dockerfile
+    restart: always
+    ports:
+      - ${FLIGHT_SERVICE_OUT_PORT}:80
+    env_file:
+      - .env
+
+  gateway:
+    depends_on:
+      - "ticket-service"
+    build:
+      context: .
+      dockerfile: ./src/Gateway/Dockerfile
+    restart: always
+    ports:
+      - ${GATEWAY_OUT_PORT}:80
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
 
 volumes:
   db-data:
+  pgadmin:
