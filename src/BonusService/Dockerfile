@@ -9,7 +9,7 @@ WORKDIR /src
 COPY ["src/BonusService/PrivilegeService.csproj", "BonusService/"]
 COPY ["src/Kernel/Kernel.csproj", "Kernel/"]
 
-RUN dotnet restore "src/BonusService/PrivilegeService.csproj"
+RUN dotnet restore "src/BonusService"
 COPY /src .
 WORKDIR "/src/BonusService"
 RUN dotnet build -c Release -o /app/build

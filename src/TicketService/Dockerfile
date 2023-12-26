@@ -9,7 +9,7 @@ WORKDIR /src
 COPY ["src/TicketService/TicketService.csproj", "TicketService/"]
 COPY ["src/Kernel/Kernel.csproj", "Kernel/"]
 
-RUN dotnet restore "/src/TicketService/TicketService.csproj"
+RUN dotnet restore "/src/TicketService"
 COPY /src .
 WORKDIR "/src/TicketService"
 RUN dotnet build -c Release -o /app/build

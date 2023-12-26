@@ -9,7 +9,7 @@ WORKDIR /src
 COPY ["src/FlightService/FlightService.csproj", "FlightService/"]
 COPY ["src/Kernel/Kernel.csproj", "Kernel/"]
 
-RUN dotnet restore "/src/FlightService/FlightService.csproj"
+RUN dotnet restore "/src/FlightService"
 COPY /src .
 WORKDIR "/src/FlightService"
 RUN dotnet build -c Release -o /app/build
