@@ -6,10 +6,10 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY ["src/BonusService/BonusService.csproj", "PrivilegeService/"]
+COPY ["src/BonusService/PrivilegeService.csproj", "BonusService/"]
 COPY ["src/Kernel/Kernel.csproj", "Kernel/"]
 
-RUN dotnet restore "/src/BonusService/PrivilegeService.csproj"
+RUN dotnet restore "src/BonusService/PrivilegeService.csproj"
 COPY /src .
 WORKDIR "/src/BonusService"
 RUN dotnet build -c Release -o /app/build

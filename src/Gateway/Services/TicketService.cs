@@ -1,4 +1,5 @@
 ﻿using Gateway.Dtos;
+using Gateway.Enums;
 using Kernel.AbstractClasses;
 using Kernel.Exceptions;
 
@@ -90,6 +91,7 @@ namespace Gateway.Services
                     Status = "PAID",
                     Username = userName
                 };
+
                 var t = await CreateTicketAsync(ticket);
                 var paidTicket = await GetTicketByUidAsync(ticket.Ticketuid.ToString());
                 var history = new PrivilegeHistoryDto
@@ -100,7 +102,7 @@ namespace Gateway.Services
                     PrivilegeId = privilege.Id,
                     TicketUid = paidTicket.Ticketuid
                 };
-                privilege.Balance -= paidByBonuses;
+                privilege.Balance -= paidByBonuses; 
                 await _privilegeService.UpdatePrivilegeAsync(privilege.Id, privilege);
                 await _privilegeService.AddPrivilegeHistoryAsync(history);
 
@@ -165,16 +167,47 @@ namespace Gateway.Services
 
         }
 
-        public async Task ReturnTicketsAsync(string ticketUid, string userName)
+        public async Task ReturnTicketsAsync(string ticketUid, string userName, Queue<QueueModel> queue)
         {
             var ticket = await GetTicketByUidAsync(ticketUid);
-            if(ticket is null)
+            if (ticket is null)
             {
                 throw new NotFoundException("Билет не найден");
             }
+            ticket.Status = "CANCELED";
+            try
+            {
+                await UpdateTicketAsync(ticket.Ticketuid.ToString(), ticket);
+            }
+            catch (Exception)
+            {
+                queue.Enqueue(new QueueModel
+                {
+                    Enum = QueueEnum.TicketServiceFallback,
+                    TicketUid = ticketUid,
+                    UserName = userName
+                });
+            }
+            try
+            {
+                await UpdatePrivilegesAfterTicketDelete(userName, ticket);
+            }
+            catch (Exception)
+            {
+                queue.Enqueue(new QueueModel
+                {
+                    Enum = QueueEnum.TicketServiceFallback,
+                    UserName = userName,
+                    Ticket = ticket
+                });
+            }
+        }
+
+        public async Task UpdatePrivilegesAfterTicketDelete(string userName, TicketDto? ticket)
+        {
             var privilege = await _privilegeService.GetPrivilegeAsync(userName);
             var histories = await _privilegeService.GetAllPrivilegeHistories(1, 100);
-            var history = histories.Items.Where(x=>x.PrivilegeId == privilege.Id).FirstOrDefault(x => x.TicketUid == ticket.Ticketuid);
+            var history = histories.Items.Where(x => x.PrivilegeId == privilege.Id).FirstOrDefault(x => x.TicketUid == ticket.Ticketuid);
             var newHistory = new PrivilegeHistoryDto
             {
                 BalanceDiff = -history.BalanceDiff,
@@ -184,8 +217,6 @@ namespace Gateway.Services
                 TicketUid = ticket.Ticketuid
             };
             privilege.Balance += newHistory.BalanceDiff;
-            ticket.Status = "CANCELED";
-            await UpdateTicketAsync(ticket.Ticketuid.ToString(), ticket);
             await _privilegeService.UpdatePrivilegeAsync(privilege.Id, privilege);
             await _privilegeService.AddPrivilegeHistoryAsync(newHistory);
         }

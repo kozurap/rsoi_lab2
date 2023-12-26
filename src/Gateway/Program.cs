@@ -16,20 +16,6 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
-// builder.Services.AddAutoMapper(x => { x.AddProfile<DefaultMappingProfile>(); });
-//
-// builder.Services.AddDbContext<AppDbContext>(x =>
-// {
-//     x.UseSnakeCaseNamingConvention();
-//     x.UseNpgsql(
-//         // (environment.IsProduction()
-//         // ? GetProductionDbConnectionString(null)
-//         // : 
-//         configuration.GetConnectionString("DefaultConnection")
-//         // ) ??
-//         // throw new NullReferenceException("Database URL is not set!")
-//     );
-// });
 
 var app = builder.Build();
 

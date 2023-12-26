@@ -2,7 +2,7 @@
 using System.Text;
 
 namespace Gateway.Wrappers
-{
+{   
     public class HttpClientDecorator
     {
         private readonly HttpClient _httpClient;
