@@ -8,7 +8,7 @@ namespace Gateway
         public QueueEnum Enum { get; set; }
         public string? TicketUid { get; set; }
         public string? UserName { get; set; }
-        public TicketDto? Ticket { get; set; }
+        public GetTicketDto? Ticket { get; set; }
 
     }
 }

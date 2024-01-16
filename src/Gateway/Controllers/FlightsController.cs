@@ -2,6 +2,7 @@
 using Gateway.Services;
 using Kernel.AbstractClasses;
 using Microsoft.AspNetCore.Mvc;
+using Polly.CircuitBreaker;
 using System.ComponentModel.DataAnnotations;
 
 namespace Gateway.Controllers
@@ -11,17 +12,14 @@ namespace Gateway.Controllers
     public class FlightsController : ControllerBase
     {
         private readonly FlightService _flightService;
-        private bool isCircuitOpen;
-        private DateTime circuitOpenTime;
-        private int attemptCount;
-        private const int MaxAttempts = 3;
-        private const int circuitBreakerTimeSpanMilliseconds = 10000;
-        public FlightsController()
+        private static bool isCircuitOpen = false;
+        private static DateTime circuitOpenTime = DateTime.MinValue;
+        private static int attemptCount = 0;
+        private static int MaxAttempts = 2;
+        private static int circuitBreakerTimeSpanMilliseconds = 10000;
+        public FlightsController(FlightService flightService)
         {
-            _flightService = new FlightService();
-            isCircuitOpen = false;
-            circuitOpenTime = DateTime.MinValue;
-            attemptCount = 0;
+            _flightService = flightService;
         }
 
         [HttpGet]
@@ -33,7 +31,7 @@ namespace Gateway.Controllers
                 CheckIfCircuitBreakerTimeStampIsComplete();
                 if (isCircuitOpen == false)
                 {
-                    return Ok(await _flightService.GetAllAsync(page, size));
+                    return Ok(await (_flightService.GetAllAsync(page, size)));
                 }
                 return StatusCode(500, "Сервис полетов недоступен");
             }
@@ -46,7 +44,7 @@ namespace Gateway.Controllers
                     attemptCount++;
                 }
                 //if the count of max attempt if reached, then open the circuits and retuen message that the service is not available
-                if (attemptCount > MaxAttempts)
+                if (attemptCount >= MaxAttempts)
                 {
                     if (isCircuitOpen == false)
                     {

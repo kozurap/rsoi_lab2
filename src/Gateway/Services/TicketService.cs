@@ -19,7 +19,7 @@ namespace Gateway.Services
             _flightService = flightService;
         }
 
-        public async Task<PaginationModel<TicketDto>?> GetAllTicketsAsync(int page, int size, string userName)
+        public async Task<PaginationModel<GetTicketDto>?> GetAllTicketsAsync(int page, int size, string userName)
         {
             var tickets = await Client.GetAsync<PaginationModel<TicketDto>>(BuildUri("api/v1/tickets"), null, new Dictionary<string, string>
             {
@@ -28,36 +28,123 @@ namespace Gateway.Services
                 { "userName", userName }
             });
 
-            if(tickets is null)
+            if (tickets is null)
             {
                 throw new NotFoundException();
             }
+            var result = new PaginationModel<GetTicketDto>()
+            {
+                Page = tickets.Page,
+                TotalElements = tickets.TotalElements,
+                PageSize = tickets.PageSize
+            };
+            try
+            {
+                foreach (TicketDto ticket in tickets.Items)
+                {
+                    var flights = await _flightService.GetAllAsync(100, 1);
+                    var flight = flights.Items.FirstOrDefault(x => x.Flightnumber == ticket.Flightnumber);
+                    result.Items.Add(new GetTicketDto()
+                    {
+                        Flightnumber = ticket.Flightnumber,
+                        Ticketuid = ticket.Ticketuid,
+                        ToAirport = flight.Toairport.Name,
+                        FromAirport = flight.Fromairport.Name,
+                        Date = flight.Datetime,
+                        Id = ticket.Id,
+                        Price = ticket.Price,
+                        Status = ticket.Status,
+                        Username = ticket.Username,
+                    });
+                }
+            }
+            catch
+            {
+                foreach (TicketDto ticket in tickets.Items)
+                {
+                    result.Items.Add(new GetTicketDto()
+                    {
+                        Flightnumber = ticket.Flightnumber,
+                        Ticketuid = ticket.Ticketuid,
+                        ToAirport = null,
+                        FromAirport = null,
+                        Date = null,
+                        Id = ticket.Id,
+                        Price = ticket.Price,
+                        Status = ticket.Status,
+                        Username = ticket.Username,
+                    });
+                }
+            }
 
-            return tickets;
+            return result;
         }
 
-        public async Task<TicketDto?> GetTicketByUidAsync(string guid)
+        public async Task<GetTicketDto?> GetTicketByUidAsync(string guid)
         {
             var ticket = await Client.GetAsync<TicketDto>(BuildUri("api/v1/tickets/" + guid));
-            if(ticket is null)
+            if (ticket is null)
             {
                 throw new NotFoundException();
             }
-             return ticket;
+            var result = new GetTicketDto();
+            try
+            {
+                var flights = await _flightService.GetAllAsync(100, 1);
+                var flight = flights.Items.FirstOrDefault(x => x.Flightnumber == ticket.Flightnumber);
+                result = new GetTicketDto()
+                {
+                    Flightnumber = ticket.Flightnumber,
+                    Ticketuid = ticket.Ticketuid,
+                    ToAirport = flight.Toairport.Name,
+                    FromAirport = flight.Fromairport.Name,
+                    Date = flight.Datetime,
+                    Id = ticket.Id,
+                    Price = ticket.Price,
+                    Status = ticket.Status,
+                    Username = ticket.Username,
+                };
+            }
+            catch
+            {
+                result = new GetTicketDto()
+                {
+                    Flightnumber = ticket.Flightnumber,
+                    Ticketuid = ticket.Ticketuid,
+                    ToAirport = null,
+                    FromAirport = null,
+                    Date = null,
+                    Id = ticket.Id,
+                    Price = ticket.Price,
+                    Status = ticket.Status,
+                    Username = ticket.Username,
+                };
+            }
+
+            return result;
         }
 
         public async Task<UserDto?> GetUserInfoAsync(string userName)
         {
             var tickets = await GetAllTicketsAsync(1, 100, userName);
-            var privelege = await _privilegeService.GetPrivilegeAsync(userName);
-            if (privelege is null)
+            var privelege = new PrivilegeDto();
+            try
             {
-                throw new NotFoundException();
+                privelege = await _privilegeService.GetPrivilegeAsync(userName);
+                if (privelege is null)
+                {
+                    throw new NotFoundException();
+                }
             }
+            catch
+            {
+                //ignore
+            }
+            
             return new UserDto()
             {
                 Privilege = privelege,
-                Tickets = tickets?.Items ?? new List<TicketDto>()
+                Tickets = tickets?.Items ?? new List<GetTicketDto>()
             };
         }
 
@@ -65,8 +152,19 @@ namespace Gateway.Services
        => await Client.PostAsync<TicketDto, TicketDto>(BuildUri("api/v1/tickets"), dto);
 
 
-        public async Task<TicketDto?> UpdateTicketAsync(string id, TicketDto dto)
-            => await Client.PatchAsync<TicketDto, TicketDto>(BuildUri("api/v1/tickets/" + id), dto);
+        public async Task<TicketDto?> UpdateTicketAsync(string id, GetTicketDto dto)
+        {
+            var ticketDto = new TicketDto()
+            {
+                Id = dto.Id,
+                Ticketuid = dto.Ticketuid,
+                Username = dto.Username,
+                Flightnumber = dto.Flightnumber,
+                Price = dto.Price,
+                Status = dto.Status
+            };
+            return await Client.PatchAsync<TicketDto, TicketDto>(BuildUri("api/v1/tickets/" + id), ticketDto);     
+        }
 
         public async Task<TicketPurchaseDto> BuyTicketsAsync(string flightNumber, int price, bool paidFromBalance, string userName)
         {
@@ -196,14 +294,14 @@ namespace Gateway.Services
             {
                 queue.Enqueue(new QueueModel
                 {
-                    Enum = QueueEnum.TicketServiceFallback,
+                    Enum = QueueEnum.ReservationServiceFallback,
                     UserName = userName,
                     Ticket = ticket
                 });
             }
         }
 
-        public async Task UpdatePrivilegesAfterTicketDelete(string userName, TicketDto? ticket)
+        public async Task UpdatePrivilegesAfterTicketDelete(string userName, GetTicketDto? ticket)
         {
             var privilege = await _privilegeService.GetPrivilegeAsync(userName);
             var histories = await _privilegeService.GetAllPrivilegeHistories(1, 100);

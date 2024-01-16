@@ -55,7 +55,8 @@ namespace FlightService.Controllers
             Console.WriteLine("Filters: " + JsonSerializer.Serialize(filter));
             var q = AttachEagerLoadingStrategyToQueryable(
                 AttachFilterToQueryable(DbContext.Set<TEntity>(), filter)
-                    .OrderByDescending(x => x.Id));
+                .IncludeAllRecursively(1)
+                .OrderByDescending(x => x.Id));
 
             var lst = await q
                 .Page(page, size)

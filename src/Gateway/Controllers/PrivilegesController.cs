@@ -9,18 +9,15 @@ namespace Gateway.Controllers
     public class PrivilegesController : ControllerBase
     {
         private readonly PrivilegeService _privilegeService;
-        private bool isCircuitOpen;
-        private DateTime circuitOpenTime;
-        private int attemptCount;
-        private const int MaxAttempts = 3;
+        private bool isCircuitOpen = false;
+        private DateTime circuitOpenTime = DateTime.MinValue;
+        private int attemptCount = 0;
+        private const int MaxAttempts = 2;
         private const int circuitBreakerTimeSpanMilliseconds = 10000;
 
         public PrivilegesController()
         {
             _privilegeService = new PrivilegeService();
-            isCircuitOpen = false;
-            circuitOpenTime = DateTime.MinValue;
-            attemptCount = 0;
         }
 
         [HttpGet]
@@ -44,7 +41,7 @@ namespace Gateway.Controllers
                     attemptCount++;
                 }
                 //if the count of max attempt if reached, then open the circuits and retuen message that the service is not available
-                if (attemptCount > MaxAttempts)
+                if (attemptCount >= MaxAttempts)
                 {
                     if (isCircuitOpen == false)
                     {

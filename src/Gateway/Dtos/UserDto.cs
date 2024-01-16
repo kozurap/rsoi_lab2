@@ -3,6 +3,6 @@
     public class UserDto
     {
         public PrivilegeDto Privilege { get; set; }
-        public List<TicketDto> Tickets { get; set; }
+        public List<GetTicketDto> Tickets { get; set; }
     }
 }

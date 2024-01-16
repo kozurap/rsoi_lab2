@@ -1,5 +1,6 @@
 using Gateway;
 using Gateway.Converters;
+using Gateway.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<FlightService>();
 
 var app = builder.Build();
 
