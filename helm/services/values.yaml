@@ -1,0 +1,45 @@
+flightservice:
+  service:
+    type: ClusterIP
+    port: 8060
+    image: kozurap/rsoi_lab2-flight-service:latest
+    env:
+      DB_HOST: postgres
+      SERVICE_HOST: 0.0.0.0
+      SERVICE_PORT: 8060
+
+privilegeservice:
+  service:
+    type: ClusterIP
+    port: 8070
+    image: kozurap/rsoi_lab2-privilege-service:latest
+    env:
+      DB_HOST: postgres
+      SERVICE_HOST: 0.0.0.0
+      SERVICE_PORT: 8070
+
+ticketservice:
+  service:
+    type: ClusterIP
+    port: 8050
+    image: kozurap/rsoi_lab2-ticket-service:latest
+    env:
+      DB_HOST: postgres
+      SERVICE_HOST: 0.0.0.0
+      SERVICE_PORT: 8050
+
+gateway:
+   service:
+    type: NodePort
+    port: 8080
+    nodePort: 30000
+    image: kozurap/rsoi_lab2-gateway:latest
+    env:
+      SERVICE_HOST: 0.0.0.0
+      SERVICE_PORT: 8080
+      BONUS_SERVICE_HOST: bonus.default.svc.cluster.local
+      BONUS_SERVICE_PORT: 8070
+      FLIGHT_SERVICE_HOST: flight.default.svc.cluster.local
+      FLIGHT_SERVICE_PORT: 8060
+      TICKET_SERVICE_HOST: ticket.default.svc.cluster.local
+      TICKET_SERVICE_PORT: 8050
