@@ -148,7 +148,7 @@
 							"path": [
 								"api",
 								"v1",
-								"privilege"
+								"privileges"
 							]
 						}
 					},
@@ -172,7 +172,7 @@
 									"path": [
 										"api",
 										"v1",
-										"privilege"
+										"privileges"
 									]
 								}
 							},
