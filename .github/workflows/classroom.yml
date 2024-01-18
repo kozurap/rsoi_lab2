@@ -37,9 +37,9 @@ jobs:
         timeout-minutes: 5
         run: ./scripts/test-script.sh
         env:
-          VARIANT: 1
-          SERVICE_NAME: gareway
-          PORT_NUMBER: 8080
+          VARIANT: v1
+          SERVICE_NAME: ticketservice
+          PORT_NUMBER: 8050
 
       - name: Stop containers
         if: always()
