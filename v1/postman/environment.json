@@ -16,7 +16,7 @@
 		},
 		{
 			"key": "username",
-			"value": ""
+			"value": "X-User-Name"
 		},
 		{
 			"key": "balance",

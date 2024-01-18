@@ -239,7 +239,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"flightNumber\": \"{{flightNumber}}\",\n    \"price\": 1500,\n    \"paidFromBalance\": false\n}"
+							"raw": "{\n    \"flightnumber\": \"{{flightNumber}}\",\n    \"price\": 1500,\n    \"paidfrombalance\": false\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/tickets",
@@ -323,7 +323,7 @@
 									"    const response = pm.response.json();",
 									"    pm.expect(response).to.be.not.undefined",
 									"    pm.expect(response.ticketUid).to.be.eq(ticketUid)",
-									"    pm.expect(response.flightNumber).to.eq(flightNumber)",
+									"    pm.expect(response.flightnumber).to.eq(flightNumber)",
 									"    pm.expect(response.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
 									"    pm.expect(response.toAirport).to.eq(\"Москва Шереметьево\")",
 									"    pm.expect(response.date).to.not.empty",
@@ -429,7 +429,7 @@
 									"    const ticket = _.find(response, { \"ticketUid\": ticketUid })",
 									"    pm.expect(ticket).to.be.not.undefined",
 									"    pm.expect(ticket.ticketUid).to.be.eq(ticketUid)",
-									"    pm.expect(ticket.flightNumber).to.eq(flightNumber)",
+									"    pm.expect(ticket.flightnumber).to.eq(flightNumber)",
 									"    pm.expect(ticket.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
 									"    pm.expect(ticket.toAirport).to.eq(\"Москва Шереметьево\")",
 									"    pm.expect(ticket.date).to.not.empty",
@@ -520,7 +520,7 @@
 									"",
 									"    pm.expect(ticket).to.be.not.undefined",
 									"    pm.expect(ticket.ticketUid).to.be.eq(ticketUid)",
-									"    pm.expect(ticket.flightNumber).to.be.eq(flightNumber)",
+									"    pm.expect(ticket.flightnumber).to.be.eq(flightNumber)",
 									"    pm.expect(ticket.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
 									"    pm.expect(ticket.toAirport).to.eq(\"Москва Шереметьево\")",
 									"    pm.expect(ticket.date).to.not.empty",
@@ -819,9 +819,9 @@
 											"",
 											"    const flight = _.find(response.items, { \"flightNumber\": flightNumber })",
 											"    pm.expect(flight).to.be.not.undefined",
-											"    pm.expect(flight.flightNumber).to.eq(flightNumber)",
-											"    pm.expect(flight.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
-											"    pm.expect(flight.toAirport).to.eq(\"Москва Шереметьево\")",
+											"    pm.expect(flight.flightnumber).to.eq(flightNumber)",
+											"    pm.expect(flight.fromairport.Name).to.eq(\"Пулково\")",
+											"    pm.expect(flight.toairport.Name).to.eq(\"Шереметьево\")",
 											"    pm.expect(flight.date).to.not.empty",
 											"    pm.expect(flight.price).to.eq(1500)",
 											"})"
@@ -1058,7 +1058,7 @@
 											"",
 											"    pm.expect(response).to.be.not.undefined",
 											"    pm.expect(response.ticketUid).to.be.not.empty",
-											"    pm.expect(response.flightNumber).to.eq(flightNumber)",
+											"    pm.expect(response.flightnumber).to.eq(flightNumber)",
 											"    pm.expect(response.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
 											"    pm.expect(response.toAirport).to.eq(\"Москва Шереметьево\")",
 											"    pm.expect(response.date).to.not.empty",
