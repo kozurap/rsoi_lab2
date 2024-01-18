@@ -2,6 +2,8 @@
 
 namespace TicketService.Controllers
 {
+    [ApiController]
+    [Route("manage/[controller]")]
     public class HealthController : ControllerBase
     {
         [HttpGet]
