@@ -32,8 +32,8 @@
 									"    const flight = _.find(response.items, { \"flightnumber\": flightNumber })",
 									"    pm.expect(flight).to.be.not.undefined",
 									"    pm.expect(flight.flightnumber).to.eq(flightNumber)",
-									"    pm.expect(flight.fromairport).to.eq(\"Пулково\")",
-									"    pm.expect(flight.toairport).to.eq(\"Шереметьево\")",
+									"    pm.expect(flight.fromairport.name).to.eq(\"Пулково\")",
+									"    pm.expect(flight.toairport.name).to.eq(\"Шереметьево\")",
 									"    pm.expect(flight.date).to.not.empty",
 									"    pm.expect(flight.price).to.eq(1500)",
 									"})"
