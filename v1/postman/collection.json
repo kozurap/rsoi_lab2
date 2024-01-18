@@ -137,7 +137,7 @@
 							{
 								"description": "Имя пользователя",
 								"key": "X-User-Name",
-								"value": "{{username}}"
+								"value": "X-User-Name"
 							}
 						],
 						"url": {
@@ -161,7 +161,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -230,7 +230,7 @@
 							{
 								"description": "Имя пользователя",
 								"key": "X-User-Name",
-								"value": "{{username}}"
+								"value": "X-User-Name"
 							},
 							{
 								"key": "Content-Type",
@@ -262,7 +262,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									},
 									{
 										"key": "Content-Type",
@@ -341,7 +341,7 @@
 							{
 								"description": "Имя пользователя",
 								"key": "X-User-Name",
-								"value": "{{username}}"
+								"value": "X-User-Name"
 							}
 						],
 						"url": {
@@ -373,7 +373,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -447,7 +447,7 @@
 							{
 								"description": "Имя пользователя",
 								"key": "X-User-Name",
-								"value": "{{username}}"
+								"value": "X-User-Name"
 							}
 						],
 						"url": {
@@ -471,7 +471,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -542,7 +542,7 @@
 							{
 								"description": "Имя пользователя",
 								"key": "X-User-Name",
-								"value": "{{username}}"
+								"value": "X-User-Name"
 							}
 						],
 						"url": {
@@ -566,7 +566,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -627,7 +627,7 @@
 							{
 								"description": "Имя пользователя",
 								"key": "X-User-Name",
-								"value": "{{username}}"
+								"value": "X-User-Name"
 							}
 						],
 						"url": {
@@ -651,7 +651,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -701,7 +701,7 @@
 							{
 								"description": "Имя пользователя",
 								"key": "X-User-Name",
-								"value": "{{username}}"
+								"value": "X-User-Name"
 							}
 						],
 						"url": {
@@ -733,7 +733,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -882,7 +882,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -924,7 +924,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -966,7 +966,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									},
 									{
 										"key": "Content-Type",
@@ -1025,7 +1025,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -1091,7 +1091,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									},
 									{
 										"key": "Content-Type",
@@ -1157,7 +1157,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -1209,7 +1209,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -1274,7 +1274,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -1312,7 +1312,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -1384,7 +1384,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
@@ -1436,7 +1436,7 @@
 									{
 										"description": "Имя пользователя",
 										"key": "X-User-Name",
-										"value": "{{username}}"
+										"value": "X-User-Name"
 									}
 								],
 								"url": {
