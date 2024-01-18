@@ -141,7 +141,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/privilege",
+							"raw": "{{baseUrl}}/api/v1/privileges",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -165,7 +165,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/api/v1/privilege",
+									"raw": "{{baseUrl}}/api/v1/privileges",
 									"host": [
 										"{{baseUrl}}"
 									],
