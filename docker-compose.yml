@@ -32,7 +32,7 @@ services:
       dockerfile: ./src/TicketService/Dockerfile
     restart: always
     ports:
-      - ${TICKET_SERVICE_OUT_PORT}:80
+      - ${TICKET_SERVICE_OUT_PORT}:{TICKET_SERVICE_OUT_PORT}
     env_file:
       - .env
         
@@ -45,7 +45,7 @@ services:
       dockerfile: ./src/BonusService/Dockerfile
     restart: always
     ports:
-      - ${PRIVILEGE_SERVICE_OUT_PORT}:80
+      - ${PRIVILEGE_SERVICE_OUT_PORT}:{PRIVILEGE_SERVICE_OUT_PORT}
     env_file:
       - .env
 
@@ -58,7 +58,7 @@ services:
       dockerfile: ./src/FlightService/Dockerfile
     restart: always
     ports:
-      - ${FLIGHT_SERVICE_OUT_PORT}:80
+      - ${FLIGHT_SERVICE_OUT_PORT}:{FLIGHT_SERVICE_OUT_PORT}
     env_file:
       - .env
 
@@ -70,7 +70,7 @@ services:
       dockerfile: ./src/Gateway/Dockerfile
     restart: always
     ports:
-      - ${GATEWAY_OUT_PORT}:80
+      - ${GATEWAY_OUT_PORT}:{GATEWAY_OUT_PORT}
     env_file:
       - .env
     environment:
