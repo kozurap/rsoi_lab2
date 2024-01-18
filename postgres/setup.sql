@@ -35,14 +35,14 @@ CREATE DATABASE tickets;
     CREATE TABLE IF NOT EXISTS flight
     (
         id              SERIAL PRIMARY KEY,
-        number          VARCHAR(20)              NOT NULL,
+        flightnumber          VARCHAR(20)              NOT NULL,
         datetime        TIMESTAMP WITH TIME ZONE NOT NULL,
         fromairportid INT REFERENCES airport (id),
         toairportid   INT REFERENCES airport (id),
         price           INT                      NOT NULL
     );
 
-    INSERT INTO flight (number, datetime, fromairportid, toairportid, price)
+    INSERT INTO flight (flightnumber, datetime, fromairportid, toairportid, price)
         values ('AFL031', cast('2021-10-08 20:00:00' as timestamp with time zone), 2, 1, 1500);
 
     GRANT ALL PRIVILEGES ON TABLE airport TO postgres;
