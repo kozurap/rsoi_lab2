@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: library/postgres:13
+    image: postgres:13
     container_name: postgres
     restart: on-failure
     environment:
@@ -12,16 +12,6 @@ services:
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
-
-  pgadmin:
-    image: dpage/pgadmin4
-    env_file:
-      - .env
-    ports:
-      - ${PGADMIN_OUT_PORT}:80
-    restart: always
-    volumes:
-      - pgadmin:/root/.pgadmin
 
   ticket-service:
     container_name: "ticketservice"
