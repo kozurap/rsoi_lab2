@@ -13,7 +13,7 @@ namespace Gateway.Services
             
         }
 
-        protected override string BaseUri => "http://privilegeservice:8070";
+        protected override string BaseUri => "http://privilegeservice:80";
 
         public async Task<PrivilegeDto?> GetPrivilegeAsync(string userName) => (await GetAllPrivelegesAsync(1,1,userName))?.Items?.FirstOrDefault();
 
