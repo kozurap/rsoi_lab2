@@ -31,9 +31,9 @@
 									"",
 									"    const flight = _.find(response.items, { \"flightNumber\": flightNumber })",
 									"    pm.expect(flight).to.be.not.undefined",
-									"    pm.expect(flight.flightNumber).to.eq(flightNumber)",
-									"    pm.expect(flight.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
-									"    pm.expect(flight.toAirport).to.eq(\"Москва Шереметьево\")",
+									"    pm.expect(flight.flightnumber).to.eq(flightNumber)",
+									"    pm.expect(flight.fromairport).to.eq(\"Санкт-Петербург Пулково\")",
+									"    pm.expect(flight.toairport).to.eq(\"Москва Шереметьево\")",
 									"    pm.expect(flight.date).to.not.empty",
 									"    pm.expect(flight.price).to.eq(1500)",
 									"})"
