@@ -1204,7 +1204,7 @@
 											"    pm.expect(response.ticketuid).to.be.eq(ticketUid)",
 											"    pm.expect(response.flightnumber).to.eq(flightNumber)",
 											"    pm.expect(response.price).to.eq(1500)",
-											"    pm.expect(response.status).to.eq(\"CANCELED\")",
+											"    pm.expect(response.status).to.eq(\"PAID\")",
 											"})"
 										],
 										"type": "text/javascript"
