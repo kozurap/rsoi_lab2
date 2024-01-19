@@ -126,19 +126,23 @@ namespace Gateway.Services
 
         public async Task<UserDto?> GetUserInfoAsync(string userName)
         {
-            var tickets = await GetAllTicketsAsync(1, 100, userName);
+            var tickets = new PaginationModel<GetTicketDto>();
+            try
+            {
+                tickets = await GetAllTicketsAsync(1, 100, userName);
+            }
+            catch
+            {
+                throw new ServiceUnavaliableException();
+            }
             var privelege = new PrivilegeDto();
             try
             {
                 privelege = await _privilegeService.GetPrivilegeAsync(userName);
-                if (privelege is null)
-                {
-                    throw new NotFoundException();
-                }
             }
             catch
             {
-                //ignore
+                privelege = null;
             }
             
             return new UserDto()
@@ -173,6 +177,15 @@ namespace Gateway.Services
             if(flight == null)
             {
                 throw new NotFoundException($"Полет с номером рейса {flightNumber} не найден");
+            }
+
+            try
+            {
+                await _privilegeService.GetAllPrivelegesAsync(1, 1, userName);
+            }
+            catch
+            {
+
             }
             var privilege = await _privilegeService.GetPrivilegeAsync(userName);
             var paidByMoney = 0;

@@ -29,6 +29,7 @@ namespace Gateway
                 {
                     UnauthorizedAccessException => (int)HttpStatusCode.Forbidden,
                     NotFoundException => (int)HttpStatusCode.NotFound,
+                    ServiceUnavaliableException => (int)HttpStatusCode.ServiceUnavailable,
                     not null => (int)HttpStatusCode.BadRequest,
                     _ => (int)HttpStatusCode.InternalServerError
                 };

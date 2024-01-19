@@ -1,6 +1,7 @@
 ﻿using Gateway.Dtos;
 using Gateway.Services;
 using Kernel.AbstractClasses;
+using Kernel.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Polly.CircuitBreaker;
 using System.ComponentModel.DataAnnotations;
@@ -33,7 +34,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await (_flightService.GetAllAsync(page, size)));
                 }
-                return StatusCode(503, "Сервис полетов недоступен");
+                throw new ServiceUnavaliableException("Сервис полетов недоступен");
             }
             catch (Exception ex)
             {
@@ -50,9 +51,9 @@ namespace Gateway.Controllers
                     {
                         RecordCircuitBreakerStart();
                     }
-                    return StatusCode(503, "Сервис полетов недоступен");
+                    throw new ServiceUnavaliableException("Сервис полетов недоступен");
                 }
-                return StatusCode(503, ex.Message);
+                throw new ServiceUnavaliableException("Сервис полетов недоступен");
             }
         }
         private void CheckIfCircuitBreakerTimeStampIsComplete()

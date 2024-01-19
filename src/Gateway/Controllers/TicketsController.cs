@@ -2,6 +2,7 @@
 using Gateway.Enums;
 using Gateway.Services;
 using Kernel.AbstractClasses;
+using Kernel.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -49,7 +50,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await _ticketService.GetAllTicketsAsync(page, size, userName));
                 }
-                return StatusCode(503, "Сервис недоступен");
+                throw new ServiceUnavaliableException("Сервис билетов недоступен");
             }
             catch (Exception ex)
             {
@@ -66,9 +67,9 @@ namespace Gateway.Controllers
                     {
                         RecordCircuitBreakerStart();
                     }
-                    return StatusCode(503, "Сервис недоступен");
+                    throw new ServiceUnavaliableException("Сервис билетов недоступен");
                 }
-                return StatusCode(503, ex.Message);
+                throw new ServiceUnavaliableException("Сервис билетов недоступен");
             }
         }
 
@@ -88,7 +89,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await _ticketService.GetTicketByUidAsync(ticketUid));
                 }
-                return StatusCode(500, "Сервис недоступен");
+                throw new ServiceUnavaliableException("Сервис билетов недоступен");
             }
             catch (Exception ex)
             {
@@ -105,9 +106,9 @@ namespace Gateway.Controllers
                     {
                         RecordCircuitBreakerStart();
                     }
-                    return StatusCode(500, "Сервис недоступен");
+                    throw new ServiceUnavaliableException("Сервис билетов недоступен");
                 }
-                return StatusCode(500, ex.Message);
+                throw new ServiceUnavaliableException("Сервис билетов недоступен");
             }
         }
 
