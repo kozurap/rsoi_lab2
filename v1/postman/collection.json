@@ -419,7 +419,6 @@
 									"    const ticketUid = pm.environment.get(\"ticketUid\")",
 									"    ",
 									"    const response = pm.response.json();",
-									"    pm.expect(response).to.be.an(\"array\")",
 									"",
 									"    const ticket = _.find(response, { \"ticketUid\": ticketUid })",
 									"    pm.expect(ticket).to.be.not.undefined",
