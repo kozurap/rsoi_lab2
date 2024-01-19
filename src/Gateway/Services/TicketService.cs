@@ -42,7 +42,7 @@ namespace Gateway.Services
             {
                 foreach (TicketDto ticket in tickets.Items)
                 {
-                    var flights = await _flightService.GetAllAsync(100, 1);
+                    var flights = await _flightService.GetAllAsync(1, 100);
                     var flight = flights.Items.FirstOrDefault(x => x.Flightnumber == ticket.Flightnumber);
                     result.Items.Add(new GetTicketDto()
                     {
