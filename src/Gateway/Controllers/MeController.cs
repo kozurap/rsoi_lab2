@@ -31,7 +31,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await _ticketService.GetUserInfoAsync(userName));
                 }
-                throw new ServiceUnavaliableException("Сервис недоступен");
+                throw new ServiceUnavaliableException("Bonus Service ");
             }
             catch (Exception ex)
             {

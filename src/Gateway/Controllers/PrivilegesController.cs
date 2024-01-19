@@ -31,7 +31,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await _privilegeService.GetUserPrivilegeDto(userName));
                 }
-                throw new ServiceUnavaliableException("Сервис бонусов недоступен");
+                throw new ServiceUnavaliableException("Bonus Service unavailable");
             }
             catch (Exception ex)
             {
@@ -48,9 +48,9 @@ namespace Gateway.Controllers
                     {
                         RecordCircuitBreakerStart();
                     }
-                    throw new ServiceUnavaliableException("Сервис бонусов недоступен");
+                    throw new ServiceUnavaliableException("Bonus Service unavailable");
                 }
-                throw new ServiceUnavaliableException("Сервис бонусов недоступен");
+                throw new ServiceUnavaliableException("Bonus Service unavailable");
             }
         }
 

@@ -34,7 +34,7 @@ namespace Gateway
                     _ => (int)HttpStatusCode.InternalServerError
                 };
 
-                var result = JsonSerializer.Serialize(new { message = error?.InnerException?.Message ?? "Error" });
+                var result = JsonSerializer.Serialize(new { message = error?.Message ?? "Error" });
                 await response.WriteAsync(result);
             }
         }
