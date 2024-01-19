@@ -190,8 +190,7 @@ namespace Gateway.Services
                     Username = userName
                 };
 
-                var t = await CreateTicketAsync(ticket);
-                var paidTicket = await GetTicketByUidAsync(ticket.Ticketuid.ToString());
+                var paidTicket = await CreateTicketAsync(ticket);
                 var history = new PrivilegeHistoryDto
                 {
                     BalanceDiff = -paidByBonuses,

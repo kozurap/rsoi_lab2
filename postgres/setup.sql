@@ -6,7 +6,7 @@ CREATE DATABASE tickets;
     CREATE TABLE IF NOT EXISTS ticket
     (
         id            SERIAL PRIMARY KEY,
-        uid           uuid UNIQUE NOT NULL,
+        ticketUid     uuid UNIQUE NOT NULL,
         username      VARCHAR(80) NOT NULL,
         flightnumber VARCHAR(20) NOT NULL,
         price         INT         NOT NULL,
