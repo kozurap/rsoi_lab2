@@ -7,7 +7,7 @@ namespace Gateway.Services
 {
     public class TicketService : ClientServiceBase
     {
-        protected override string BaseUri => "http://ticketservice:8050";
+        protected override string BaseUri => "http://ticketservice:80";
 
         private readonly FlightService _flightService;
 

@@ -5,7 +5,7 @@ namespace Gateway.Services
 {
     public class FlightService : ClientServiceBase
     {
-        protected override string BaseUri => "http://flightservice:8060";
+        protected override string BaseUri => "http://flightservice:80";
 
         public FlightService() : base()
         {
