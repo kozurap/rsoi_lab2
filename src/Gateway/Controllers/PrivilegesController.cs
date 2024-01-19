@@ -30,7 +30,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await _privilegeService.GetUserPrivilegeDto(userName));
                 }
-                return StatusCode(500, "Сервис недоступен");
+                return StatusCode(503, "Сервис недоступен");
             }
             catch (Exception ex)
             {
@@ -47,9 +47,9 @@ namespace Gateway.Controllers
                     {
                         RecordCircuitBreakerStart();
                     }
-                    return StatusCode(500, "Сервис недоступен");
+                    return StatusCode(503, "Сервис недоступен");
                 }
-                return StatusCode(500, ex.Message);
+                return StatusCode(503, ex.Message);
             }
         }
 

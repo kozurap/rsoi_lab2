@@ -831,7 +831,7 @@
 											"    pm.expect(response.pageSize).to.be.lte(pageSize)",
 											"    pm.expect(response.totalElements).to.be.not.undefined",
 											"",
-											"    const flight = _.find(response.items, { \"flightNumber\": flightNumber })",
+											"    const flight = _.find(response.items, { \"flightnumber\": flightNumber })",
 											"    pm.expect(flight).to.be.not.undefined",
 											"    pm.expect(flight.flightnumber).to.eq(flightNumber)",
 											"    pm.expect(flight.fromairport.Name).to.eq(\"Пулково\")",

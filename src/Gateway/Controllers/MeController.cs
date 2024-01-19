@@ -30,7 +30,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await _ticketService.GetUserInfoAsync(userName));
                 }
-                return StatusCode(500, "Сервис недоступен");
+                return StatusCode(503, "Сервис недоступен");
             }
             catch (Exception ex)
             {

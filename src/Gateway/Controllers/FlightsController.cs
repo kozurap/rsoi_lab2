@@ -33,7 +33,7 @@ namespace Gateway.Controllers
                 {
                     return Ok(await (_flightService.GetAllAsync(page, size)));
                 }
-                return StatusCode(500, "Сервис полетов недоступен");
+                return StatusCode(503, "Сервис полетов недоступен");
             }
             catch (Exception ex)
             {
@@ -50,9 +50,9 @@ namespace Gateway.Controllers
                     {
                         RecordCircuitBreakerStart();
                     }
-                    return StatusCode(500, "Сервис полетов недоступен");
+                    return StatusCode(503, "Сервис полетов недоступен");
                 }
-                return StatusCode(500, ex.Message);
+                return StatusCode(503, ex.Message);
             }
         }
         private void CheckIfCircuitBreakerTimeStampIsComplete()
