@@ -90,7 +90,7 @@ namespace Gateway.Services
             var result = new GetTicketDto();
             try
             {
-                var flights = await _flightService.GetAllAsync(100, 1);
+                var flights = await _flightService.GetAllAsync(1, 100);
                 var flight = flights.Items.FirstOrDefault(x => x.Flightnumber == ticket.Flightnumber);
                 result = new GetTicketDto()
                 {
