@@ -458,7 +458,7 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "0"
+									"value": "1"
 								},
 								{
 									"key": "size",
@@ -492,7 +492,7 @@
 									"query": [
 										{
 											"key": "page",
-											"value": "0"
+											"value": "1"
 										},
 										{
 											"key": "size",
