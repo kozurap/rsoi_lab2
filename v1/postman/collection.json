@@ -420,7 +420,7 @@
 									"    ",
 									"    const response = pm.response.json();",
 									"",
-									"    const ticket = _.find(response, { \"ticketuid\": ticketUid })",
+									"    const ticket = _.find(response.items, { \"ticketuid\": ticketUid })",
 									"    pm.expect(ticket).to.be.not.undefined",
 									"    pm.expect(ticket.ticketuid).to.be.eq(ticketUid)",
 									"    pm.expect(ticket.flightnumber).to.eq(flightNumber)",
