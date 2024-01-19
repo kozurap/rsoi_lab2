@@ -925,7 +925,7 @@
 											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 											"    const response = pm.response.json();",
 											"    pm.expect(response.tickets).to.be.an(\"array\")",
-											"    pm.expect(response.privilege).to.be.empty",
+											"    pm.expect(response.privilege).to.be.null",
 											"})"
 										],
 										"type": "text/javascript"
@@ -989,7 +989,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"flightNumber\": \"{{flightnumber}}\",\n    \"price\": 1500,\n    \"paidfrombalance\": false\n}"
+									"raw": "{\n    \"flightnumber\": \"{{flightNumber}}\",\n    \"price\": 1500,\n    \"paidfrombalance\": false\n}"
 								},
 								"url": {
 									"raw": "{{baseUrl}}/api/v1/tickets",
