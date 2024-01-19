@@ -185,7 +185,7 @@ namespace Gateway.Services
             }
             catch
             {
-                throw new ServiceUnavaliableException("Bonus Service unavaliable");
+                throw new ServiceUnavaliableException("Bonus Service unavailable");
             }
             var privilege = await _privilegeService.GetPrivilegeAsync(userName);
             var paidByMoney = 0;
