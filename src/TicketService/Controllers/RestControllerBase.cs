@@ -15,7 +15,8 @@ namespace TicketService.Controllers
     {
         protected readonly IMapper Mapper;
         protected readonly AppDbContext DbContext;
-
+        private const string serviceName = "TicketService";
+        private readonly LogsProducer producer;
         protected virtual Expression<Func<TEntity, bool>>? UidPredicate(Guid uId) => null;
         protected bool IsUidSupported => UidPredicate(Guid.NewGuid()) != null;
         protected virtual Guid? GetUid(TEntity e) => null;
@@ -24,15 +25,17 @@ namespace TicketService.Controllers
         {
         }
 
-        public RestControllerBase(IMapper mapper, AppDbContext dbContext)
+        public RestControllerBase(IMapper mapper, AppDbContext dbContext, LogsProducer producer)
         {
             Mapper = mapper;
             DbContext = dbContext;
+            this.producer = producer;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TDto>> GetByIdAsync(string id)
         {
+            await producer.Produce(serviceName +"Get"+ $"/{id}");
             int? intId = int.TryParse(id, out var asInt) ? asInt : null;
             Guid? guid = Guid.TryParse(id, out var asGuid) ? asGuid : null;
 
@@ -49,9 +52,10 @@ namespace TicketService.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<PaginationModel<TDto>>> GetAllAsync([FromQuery] TFilter filter, [FromQuery] int size = 10,
+        public async Task<ActionResult<PaginationModel<TDto>>> GetAllAsync([FromQuery] TFilter filter, [FromQuery] int size = 100,
             [FromQuery] int page = 1)
         {
+            await producer.Produce(serviceName+"Get");
             Console.WriteLine("Filters: " + JsonSerializer.Serialize(filter));
             var q = AttachEagerLoadingStrategyToQueryable(
                 AttachFilterToQueryable(DbContext.Set<TEntity>(), filter)
@@ -73,6 +77,7 @@ namespace TicketService.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] TDto dto)
         {
+            await producer.Produce(serviceName+"Post");
             var e = new TEntity();
             MapDtoToEntity(e, dto);
 
@@ -87,6 +92,7 @@ namespace TicketService.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<TDto>> UpdateAsync([FromBody] TDto dto, string id)
         {
+            await producer.Produce(serviceName+ "Patch/" + id);
             int? intId = int.TryParse(id, out var asInt) ? asInt : null;
             Guid? guid = Guid.TryParse(id, out var asGuid) ? asGuid : null;
 
@@ -109,6 +115,7 @@ namespace TicketService.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
+            await producer.Produce(serviceName+ "Delete/" + id);
             var e = await DbContext.Set<TEntity>()
                 .FirstOrDefaultAsync(x => x.Id == id);
 

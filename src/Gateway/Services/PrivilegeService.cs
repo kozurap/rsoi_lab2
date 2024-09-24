@@ -13,7 +13,7 @@ namespace Gateway.Services
             
         }
 
-        protected override string BaseUri => "http://privilegeservice:80";
+        protected override string BaseUri => "http://privilegeservice:8070";//8070
 
         public async Task<PrivilegeDto?> GetPrivilegeAsync(string userName) => (await GetAllPrivelegesAsync(1,1,userName))?.Items?.FirstOrDefault();
 
@@ -38,6 +38,8 @@ namespace Gateway.Services
             => await Client.PatchAsync<PrivilegeDto, PrivilegeDto>(BuildUri("api/v1/privileges/" + id), dto);
         public async Task<PrivilegeHistoryDto?> AddPrivilegeHistoryAsync(PrivilegeHistoryDto dto)
             => await Client.PostAsync<PrivilegeHistoryDto, PrivilegeHistoryDto>(BuildUri("api/v1/privilegeshistory/"), dto);
+        public async Task<PrivilegeDto?> AddPrivilegeAsync(PrivilegeDto dto)
+            => await Client.PostAsync<PrivilegeDto, PrivilegeDto>(BuildUri("api/v1/privileges/"), dto);
 
         public async Task<UserPrivilegeDto?> GetUserPrivilegeDto(string userName)
         {

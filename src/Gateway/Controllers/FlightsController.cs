@@ -1,4 +1,5 @@
-﻿using Gateway.Dtos;
+﻿using Gateway.Attributes;
+using Gateway.Dtos;
 using Gateway.Services;
 using Kernel.AbstractClasses;
 using Kernel.Exceptions;
@@ -24,6 +25,7 @@ namespace Gateway.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<PaginationModel<FlightDto>>> GetAll([FromQuery, Required] int page, [FromQuery, Required] int size)
         {
             

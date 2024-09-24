@@ -8,7 +8,7 @@ namespace PrivilegeService.Controllers
 {
     public class PrivilegesController : RestControllerBase<Privilege, PrivilegeDto, PrivilegeFilter>
     {
-        public PrivilegesController(IMapper mapper, AppDbContext dbContext) : base(mapper, dbContext)
+        public PrivilegesController(IMapper mapper, AppDbContext dbContext, LogsProducer producer) : base(mapper, dbContext, producer)
         {
         }
 

@@ -1,4 +1,5 @@
-﻿using Gateway.Dtos;
+﻿using Gateway.Attributes;
+using Gateway.Dtos;
 using Gateway.Services;
 using Kernel.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -22,14 +23,17 @@ namespace Gateway.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserDto>> Get([FromHeader(Name = HeaderConstant.UserName)] string userName)
+        [Authorize]
+        [Route("get")]
+        public async Task<ActionResult<UserDto>> Get()
         {
             try
             {
                 CheckIfCircuitBreakerTimeStampIsComplete();
                 if (isCircuitOpen == false)
                 {
-                    return Ok(await _ticketService.GetUserInfoAsync(userName));
+                    var user = HttpContext.User;
+                    return Ok(await _ticketService.GetUserInfoAsync(user.Identity.Name));
                 }
                 throw new ServiceUnavaliableException("Bonus Service ");
             }

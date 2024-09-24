@@ -1,5 +1,6 @@
 using FlightService;
 using FlightService.Profiles;
+using Kernel.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ var environment = builder.Environment;
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSingleton<LogsProducer>();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(x => { x.AddProfile<FlightProfile>(); });

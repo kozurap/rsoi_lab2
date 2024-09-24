@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FlightService.Controllers.RestControllerBase&lt;TEntity, TDto, TFilter&gt;">
+    <Position X="4" Y="3.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAEAAEAAAAACAABACAgBEAEAAAAAMAgAAAAAEIAAIIA=</HashCode>
+      <FileName>Controllers\RestControllerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlightService.Entities.Airport">
+    <Position X="5.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAIAQAIAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Airport.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlightService.Entities.Flight">
+    <Position X="7.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAABAAARAAAAAAAAAAAAAAAAAAAAAhAAAAAABAAAA=</HashCode>
+      <FileName>Entities\Flight.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlightService.Dtos.FlightDto">
+    <Position X="1.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICABAAARAAAAAAAAAAAAAAAAAAAAAhAAAAAABAAAA=</HashCode>
+      <FileName>Dtos\FlightDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlightService.Dtos.AirportDto">
+    <Position X="3" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAIAAAAAAQAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dtos\AirportDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,4 +1,6 @@
+using AuthService.Middlewares;
 using Gateway;
+using Gateway.Configurations;
 using Gateway.Converters;
 using Gateway.Services;
 
@@ -18,6 +20,9 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<FlightService>();
+builder.Services.Configure<JwtConfiguration>(configuration.GetSection("JwtConfiguration"));
+builder.Services.Configure<GatewaySecret>(configuration.GetSection("GatewaySecret"));
+builder.Services.AddTransient<Gateway.Services.AuthService>();
 
 var app = builder.Build();
 
@@ -35,6 +40,7 @@ app.UseSwaggerUI();
 using var scope = app.Services.CreateScope();
 
 app.UseMiddleware<HandleErrorsMiddleware>();
+app.UseMiddleware<JwtMiddleware>();
 
 var services = scope.ServiceProvider;
 //

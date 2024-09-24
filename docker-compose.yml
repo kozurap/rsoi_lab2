@@ -8,20 +8,26 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - db-data:/var/lib/postgresql/
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
-
-  pgadmin:
-    image: dpage/pgadmin4
+    networks:
+      - internal
+       
+  auth-service:
+    container_name: "authorizationservice"
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: ./src/AuthorizationService/Dockerfile
+    restart: always
+    ports:
+      - ${AUTH_SERVICE_OUT_PORT}:80
     env_file:
       - .env
-    ports:
-      - ${PGADMIN_OUT_PORT}:80
-    restart: always
-    volumes:
-      - pgadmin:/root/.pgadmin
+    networks:
+      - internal
 
   ticket-service:
     container_name: "ticketservice"
@@ -35,7 +41,24 @@ services:
       - ${TICKET_SERVICE_OUT_PORT}:80
     env_file:
       - .env
-        
+    networks:
+      - internal
+
+  client:
+    container_name: "client"
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: ./src/Client/Dockerfile
+    restart: always
+    ports:
+      - ${CLIENT_SERVICE_OUT_PORT}:80
+    env_file:
+      - .env
+    networks:
+      - internal     
+      
   privilege-service:
     container_name: "privilegeservice"
     depends_on:
@@ -48,6 +71,8 @@ services:
       - ${PRIVILEGE_SERVICE_OUT_PORT}:80
     env_file:
       - .env
+    networks:
+      - internal
 
   flight-service:
     container_name: "flightservice"
@@ -61,6 +86,23 @@ services:
       - ${FLIGHT_SERVICE_OUT_PORT}:80
     env_file:
       - .env
+    networks:
+      - internal
+
+  stats-service:
+    container_name: "statsservice"
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: ./src/StatsService/Dockerfile
+    restart: always
+    ports:
+      - ${STATS_SERVICE_OUT_PORT}:80
+    env_file:
+      - .env
+    networks:
+      - internal
 
   gateway:
     depends_on:
@@ -75,8 +117,43 @@ services:
       - .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - internal
 
+  zookeeper:
+        image: confluentinc/cp-zookeeper:7.3.2
+        container_name: zookeeper
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 22181
+            ZOOKEEPER_TICK_TIME: 2000
+        ports:
+            - 22181:22181
+        networks:
+            - internal
+  broker-kafka:
+        image: confluentinc/cp-kafka:7.3.2
+        container_name: broker-kafka
+        environment:
+            KAFKA_BROKER_ID: 1
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:22181
+
+            KAFKA_LISTENERS: LISTENER_BOB://broker-kafka:29092,LISTENER_FRED://localhost:9092
+            KAFKA_ADVERTISED_LISTENERS: LISTENER_BOB://broker-kafka:29092,LISTENER_FRED://localhost:9092
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_BOB:PLAINTEXT,LISTENER_FRED:PLAINTEXT
+            KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_BOB
+
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+        depends_on:
+            - zookeeper
+        ports:
+            - 29092:29092
+        networks:
+            - internal
 
 volumes:
   db-data:
   pgadmin:
+
+networks:
+    internal:  

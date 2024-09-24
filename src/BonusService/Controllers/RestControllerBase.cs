@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Confluent.Kafka;
 using Kernel.AbstractClasses;
 using Kernel.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Text.Json;
+using static Confluent.Kafka.ConfigPropertyNames;
 
 namespace PrivilegeService.Controllers
 {
@@ -15,8 +17,9 @@ namespace PrivilegeService.Controllers
     {
         protected readonly IMapper Mapper;
         protected readonly AppDbContext DbContext;
-
+        private readonly LogsProducer _producer;
         protected virtual Expression<Func<TEntity, bool>>? UidPredicate(Guid uId) => null;
+        private const string serviceName = "PrivilegeService";
         protected bool IsUidSupported => UidPredicate(Guid.NewGuid()) != null;
         protected virtual Guid? GetUid(TEntity e) => null;
 
@@ -24,15 +27,17 @@ namespace PrivilegeService.Controllers
         {
         }
 
-        public RestControllerBase(IMapper mapper, AppDbContext dbContext)
+        public RestControllerBase(IMapper mapper, AppDbContext dbContext, LogsProducer producer)
         {
             Mapper = mapper;
             DbContext = dbContext;
+            _producer = producer;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TDto>> GetByIdAsync(string id)
         {
+            await _producer.Produce(serviceName + "Get" + $"/{id}");
             int? intId = int.TryParse(id, out var asInt) ? asInt : null;
             Guid? guid = Guid.TryParse(id, out var asGuid) ? asGuid : null;
 
@@ -52,6 +57,7 @@ namespace PrivilegeService.Controllers
         public async Task<ActionResult<PaginationModel<TDto>>> GetAllAsync([FromQuery] TFilter filter, [FromQuery] int size = 10,
             [FromQuery] int page = 1)
         {
+            await _producer.Produce(serviceName + "Get");
             Console.WriteLine("Filters: " + JsonSerializer.Serialize(filter));
             var q = AttachEagerLoadingStrategyToQueryable(
                 AttachFilterToQueryable(DbContext.Set<TEntity>(), filter)
@@ -73,6 +79,7 @@ namespace PrivilegeService.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] TDto dto)
         {
+            await _producer.Produce(serviceName + "Post");
             var e = new TEntity();
             MapDtoToEntity(e, dto);
 
@@ -87,6 +94,7 @@ namespace PrivilegeService.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<TDto>> UpdateAsync([FromBody] TDto dto, string id)
         {
+            await _producer.Produce(serviceName + "Patch" + $"/{id}");
             int? intId = int.TryParse(id, out var asInt) ? asInt : null;
             Guid? guid = Guid.TryParse(id, out var asGuid) ? asGuid : null;
 
@@ -109,6 +117,7 @@ namespace PrivilegeService.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
+            await _producer.Produce(serviceName + "Delete" + $"/{id}");
             var e = await DbContext.Set<TEntity>()
                 .FirstOrDefaultAsync(x => x.Id == id);
 

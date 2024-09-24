@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light" id="navFix">
+        <ul class="navbar-nav">
+                <li class="nav-item m-1">
+                <a class="nav-link" style="color:darkseagreen" asp-controller="Authorization" asp-action="Register">Зарегистрироваться</a>
+
+                </li>
+                <li class="nav-item m-1">
+                <a class="nav-link" style="color:darkseagreen" asp-controller="Authorization" asp-action="Login">Войти</a>
+                </li>
+            
+
+        </ul>
+        <button class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarCollapse"
+                aria-controls="navbarCollapse"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse navbar-dark bg-light" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto sidenav bg-dark" id="navAccordion">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Домой</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Flight" asp-action="GetFlights">Полеты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Stats" asp-action="Stats">Статистика</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Me" asp-action="Get">Профиль</a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div class="container-fluid" id="mainBody">
+        <main role="main" class="pb-3 offset-lg-2">
+            @RenderBody()
+        </main>
+        <footer class="footer">
+            <div class="container">
+                <div class="text-center">
+                    <div>
+                        <a asp-controller="Home" asp-action="Index">Назад на главную страницу</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿@model Client.Models.MeModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="user-account row">
+    <div class="user-info">
+        <h4>Логин</h4>
+        <p>@Model.Privilege?.Username</p>
+        <h4>Баланс бонусного счета</h4>
+        <p>@Model.Privilege?.Balance</p>
+        <h4>Статус программы привилегий</h4>
+        <p>@Model.Privilege?.Status</p>
+    </div>
+</div>
+<div class="main-grids">
+    <div class="recommended">
+        <div class="recommended-grids english-grid">
+            <div class="recommended-info">
+                <h3>Список билетов</h3>
+            </div>
+            <div class="container">
+                
+                    @foreach (var e in Model.Tickets)
+                    {
+                    <div class="row">
+                            <div class="col">
+                                    <p class="author">@e.Flightnumber</p>
+                            </div>
+                        <div class="col">
+                                <p class="author">Из @e.FromAirport</p>
+                        </div>
+                        <div class="col">
+                                <p class="author">В @e.ToAirport</p>
+                        </div>
+                    </div>
+                    }
+            </div>
+        </div>
+    </div>
+</div>

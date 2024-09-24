@@ -1,3 +1,4 @@
+using Kernel.Extensions;
 using Microsoft.EntityFrameworkCore;
 using PrivilegeService;
 using PrivilegeService.Profiles;
@@ -14,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(x => { x.AddProfile<PrivilegeProfile>(); });
+builder.Services.AddSingleton<LogsProducer>();
 
 builder.Services.AddDbContext<AppDbContext>(x =>
 {

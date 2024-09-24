@@ -1,0 +1,20 @@
+﻿@model Client.Models.StatModel
+@{
+    Layout = "_Layout";
+}
+<div class="main-grids">
+    <div class="recommended">
+        <div class="recommended-grids english-grid">
+            <div class="recommended-info">
+                <h3>Статистика запросов</h3>
+            </div>
+                @foreach (var e in Model.Stats)
+                {
+                <div class="row">
+                    <div class="col">@e.Text</div>
+                    <div class="col">@e.Count</div>
+                </div>
+                }
+        </div>
+    </div>
+</div>

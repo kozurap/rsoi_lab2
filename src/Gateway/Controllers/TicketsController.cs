@@ -1,4 +1,5 @@
-﻿using Gateway.Dtos;
+﻿using Gateway.Attributes;
+using Gateway.Dtos;
 using Gateway.Enums;
 using Gateway.Services;
 using Kernel.AbstractClasses;
@@ -26,6 +27,7 @@ namespace Gateway.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<PaginationModel<GetTicketDto>>> GetAll([FromQuery, Required] int page, [FromQuery, Required] int size, [FromHeader(Name = HeaderConstant.UserName)] string userName)
         {
             if (queue.Any())
@@ -48,7 +50,8 @@ namespace Gateway.Controllers
                 CheckIfCircuitBreakerTimeStampIsComplete();
                 if (isCircuitOpen == false)
                 {
-                    return Ok(await _ticketService.GetAllTicketsAsync(page, size, userName));
+                    var user = HttpContext.User;
+                    return Ok(await _ticketService.GetAllTicketsAsync(page, size, user.Identity.Name));
                 }
                 throw new ServiceUnavaliableException("Сервис билетов недоступен");
             }
@@ -72,15 +75,26 @@ namespace Gateway.Controllers
                 throw new ServiceUnavaliableException("Сервис билетов недоступен");
             }
         }
+        [HttpGet]
+        [Route("GetAllTickets")]
+        [Authorize]
+        public async Task<ActionResult<PaginationModel<GetTicketDto>>> GetAllTickets()
+        {
+            return Ok(await _ticketService.GetAllTicketsNoUserAsync());
+        }
 
         [HttpPost]
-        public async Task<ActionResult<TicketPurchaseDto>> PurchaseTicket(BuyTicketDto model, [FromHeader(Name = HeaderConstant.UserName)] string userName)
+        [Route("PurchaseTicket")]
+        [Authorize]
+        public async Task<ActionResult<TicketPurchaseDto>> PurchaseTicket(BuyTicketDto model)
         {
-            return Ok(await _ticketService.BuyTicketsAsync(model.Flightnumber, model.Price, model.Paidfrombalance, userName));
+            var user = HttpContext.User;
+            return Ok(await _ticketService.BuyTicketsAsync(model.Flightnumber, model.Price, model.Paidfrombalance, user.Identity.Name));
         }
 
         [HttpGet("{ticketUid}")]
-        public async Task<ActionResult<TicketDto>> GetByUid(string ticketUid, [FromHeader(Name = HeaderConstant.UserName)] string userName)
+        [Authorize]
+        public async Task<ActionResult<TicketDto>> GetByUid(string ticketUid)
         {
             try
             {
@@ -113,9 +127,11 @@ namespace Gateway.Controllers
         }
 
         [HttpDelete("{ticketUid}")]
+        [Authorize]
         public async Task<ActionResult<TicketDto>> CancelTicket(string ticketUid, [FromHeader(Name = HeaderConstant.UserName)] string userName)
         {
-            await _ticketService.ReturnTicketsAsync(ticketUid, userName, queue);
+            var user = HttpContext.User;
+            await _ticketService.ReturnTicketsAsync(ticketUid, user.Identity.Name , queue);
             return NoContent();
         }
 

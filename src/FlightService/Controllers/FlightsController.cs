@@ -2,13 +2,14 @@
 using FlightService.Dtos;
 using FlightService.Entities;
 using FlightService.Filters;
+using Kernel.Extensions;
 using System.Linq.Expressions;
 
 namespace FlightService.Controllers
 {
     public class FlightsController : RestControllerBase<Flight, FlightDto, FlightFilter>
     {
-        public FlightsController(IMapper mapper, AppDbContext dbContext) : base(mapper, dbContext)
+        public FlightsController(IMapper mapper, AppDbContext dbContext, LogsProducer producer) : base(mapper, dbContext, producer)
         {
         }
         protected override void MapDtoToEntity(Flight flight, FlightDto flightDto)

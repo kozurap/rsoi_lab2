@@ -7,7 +7,7 @@ namespace Gateway.Services
 {
     public class TicketService : ClientServiceBase
     {
-        protected override string BaseUri => "http://ticketservice:80";
+        protected override string BaseUri => "http://ticketservice:8050";//8050
 
         private readonly FlightService _flightService;
 
@@ -19,7 +19,14 @@ namespace Gateway.Services
             _flightService = flightService;
         }
 
-        public async Task<PaginationModel<GetTicketDto>?> GetAllTicketsAsync(int page, int size, string userName)
+        public async Task<PaginationModel<TicketDto>?> GetAllTicketsNoUserAsync()
+        {
+            var tickets = await Client.GetAsync<PaginationModel<TicketDto>>(BuildUri("api/v1/tickets"), null, null);
+
+            return tickets;
+        }
+
+            public async Task<PaginationModel<GetTicketDto>?> GetAllTicketsAsync(int page, int size, string userName)
         {
             var tickets = await Client.GetAsync<PaginationModel<TicketDto>>(BuildUri("api/v1/tickets"), null, new Dictionary<string, string>
             {
@@ -188,6 +195,18 @@ namespace Gateway.Services
                 throw new ServiceUnavaliableException("Bonus Service unavailable");
             }
             var privilege = await _privilegeService.GetPrivilegeAsync(userName);
+            if(privilege == null)
+            {
+                var np = new PrivilegeDto()
+                {
+                    Balance = 0,
+                    Status = "BRONZE",
+                    Username = userName,
+                    PrivilegeHistories = new List<PrivilegeHistoryDto>()
+                };
+                privilege = await _privilegeService.AddPrivilegeAsync(np);
+            }
+            privilege = await _privilegeService.GetPrivilegeAsync(userName);
             var paidByMoney = 0;
             var paidByBonuses = 0;
             if (paidFromBalance)
@@ -250,7 +269,7 @@ namespace Gateway.Services
                     BalanceDiff = price/10,
                     Datetime = DateTime.Now,
                     OperationType = "DEBIT_THE_ACCOUNT",
-                    PrivilegeId = privilege.Id,
+                    PrivilegeId = 1, // privilege.Id, TODO заглушка
                     TicketUid = paidTicket.Ticketuid
                 };
                 privilege.Balance += price/10;

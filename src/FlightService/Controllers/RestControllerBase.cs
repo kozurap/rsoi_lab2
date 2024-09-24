@@ -15,24 +15,27 @@ namespace FlightService.Controllers
     {
         protected readonly IMapper Mapper;
         protected readonly AppDbContext DbContext;
-
+        private const string serviceName = "FlightService";
         protected virtual Expression<Func<TEntity, bool>>? UidPredicate(Guid uId) => null;
         protected bool IsUidSupported => UidPredicate(Guid.NewGuid()) != null;
         protected virtual Guid? GetUid(TEntity e) => null;
+        private readonly LogsProducer producer;
 
         protected virtual void SetUid(TEntity entity, Guid uId)
         {
         }
 
-        public RestControllerBase(IMapper mapper, AppDbContext dbContext)
+        public RestControllerBase(IMapper mapper, AppDbContext dbContext, LogsProducer producer)
         {
             Mapper = mapper;
             DbContext = dbContext;
+            this.producer = producer;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TDto>> GetByIdAsync(string id)
         {
+            await producer.Produce(serviceName + $"/{id}");
             int? intId = int.TryParse(id, out var asInt) ? asInt : null;
             Guid? guid = Guid.TryParse(id, out var asGuid) ? asGuid : null;
 
@@ -52,6 +55,7 @@ namespace FlightService.Controllers
         public async Task<ActionResult<PaginationModel<TDto>>> GetAllAsync([FromQuery] TFilter filter, [FromQuery] int size = 10,
             [FromQuery] int page = 1)
         {
+            await producer.Produce(serviceName + "Get");
             Console.WriteLine("Filters: " + JsonSerializer.Serialize(filter));
             var q = AttachEagerLoadingStrategyToQueryable(
                 AttachFilterToQueryable(DbContext.Set<TEntity>(), filter)
@@ -74,6 +78,7 @@ namespace FlightService.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] TDto dto)
         {
+            await producer.Produce(serviceName);
             var e = new TEntity();
             MapDtoToEntity(e, dto);
 
@@ -88,6 +93,7 @@ namespace FlightService.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<TDto>> UpdateAsync([FromBody] TDto dto, string id)
         {
+            await producer.Produce(serviceName + $"/{id}");
             int? intId = int.TryParse(id, out var asInt) ? asInt : null;
             Guid? guid = Guid.TryParse(id, out var asGuid) ? asGuid : null;
 
@@ -110,6 +116,7 @@ namespace FlightService.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
+            await producer.Produce(serviceName + $"/{id}");
             var e = await DbContext.Set<TEntity>()
                 .FirstOrDefaultAsync(x => x.Id == id);
 

@@ -1,4 +1,5 @@
-﻿using Gateway.Dtos;
+﻿using Gateway.Attributes;
+using Gateway.Dtos;
 using Gateway.Services;
 using Kernel.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ namespace Gateway.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<UserPrivilegeDto>> Get([FromHeader(Name = HeaderConstant.UserName)] string userName)
         {
             try
@@ -29,7 +31,8 @@ namespace Gateway.Controllers
                 CheckIfCircuitBreakerTimeStampIsComplete();
                 if (isCircuitOpen == false)
                 {
-                    return Ok(await _privilegeService.GetUserPrivilegeDto(userName));
+                    var user = HttpContext.User;
+                    return Ok(await _privilegeService.GetUserPrivilegeDto(user.Identity.Name));
                 }
                 throw new ServiceUnavaliableException("Bonus Service unavailable");
             }
